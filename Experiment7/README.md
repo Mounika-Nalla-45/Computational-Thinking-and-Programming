@@ -1,22 +1,27 @@
-Practical 7: Producer-Consumer Application
-Question
+## 7. Producer-Consumer Application
+
+### Question
 
 Develop a Producer-Consumer application using threading, multiprocessing, and synchronization primitives.
 
-Aim
+### Aim
 
 To develop a simple Producer-Consumer application using Python threading, multiprocessing, Lock, and Semaphore.
 
-Algorithm
-Create a shared queue.
-Producer adds items to the queue.
-Consumer removes items from the queue.
-Use Lock to protect the shared queue.
-Use Semaphore to control queue access.
-Use threading for concurrent execution.
-Use multiprocessing for separate processes.
-Display the produced and consumed items.
-Program
+### Algorithm
+
+1. Create a shared queue.
+2. Producer adds items to the queue.
+3. Consumer removes items from the queue.
+4. Use Lock to protect the shared queue.
+5. Use Semaphore to control queue access.
+6. Use threading for concurrent execution.
+7. Use multiprocessing for separate processes.
+8. Display the produced and consumed items.
+
+### Program
+
+```python
 import threading
 import multiprocessing
 import queue
@@ -27,6 +32,8 @@ q = queue.Queue(maxsize=5)
 lock = threading.Lock()
 semaphore = threading.Semaphore(5)
 
+
+# Producer
 def producer():
     for i in range(1, 6):
         semaphore.acquire()
@@ -37,6 +44,8 @@ def producer():
 
         time.sleep(1)
 
+
+# Consumer
 def consumer():
     for i in range(1, 6):
         with lock:
@@ -46,46 +55,59 @@ def consumer():
         semaphore.release()
         time.sleep(1)
 
-# Threading
-t1 = threading.Thread(target=producer)
-t2 = threading.Thread(target=consumer)
 
-t1.start()
-t2.start()
-
-t1.join()
-t2.join()
-
-print("Threading completed")
-
-
-# Multiprocessing
+# Multiprocessing function
 def process_task(name):
     print(name, "process started")
     time.sleep(1)
     print(name, "process completed")
 
-p1 = multiprocessing.Process(
-    target=process_task,
-    args=("Producer",)
-)
 
-p2 = multiprocessing.Process(
-    target=process_task,
-    args=("Consumer",)
-)
+# Main program
+if __name__ == "__main__":
 
-p1.start()
-p2.start()
+    # Threading
+    t1 = threading.Thread(target=producer)
+    t2 = threading.Thread(target=consumer)
 
-p1.join()
-p2.join()
+    t1.start()
+    t2.start()
 
-print("Multiprocessing completed")
-Input
+    t1.join()
+    t2.join()
+
+    print("Threading completed")
+
+    # Multiprocessing
+    p1 = multiprocessing.Process(
+        target=process_task,
+        args=("Producer",)
+    )
+
+    p2 = multiprocessing.Process(
+        target=process_task,
+        args=("Consumer",)
+    )
+
+    p1.start()
+    p2.start()
+
+    p1.join()
+    p2.join()
+
+    print("Multiprocessing completed")
+```
+
+### Input
+
+```text
 Number of items = 5
 Queue size = 5
-Output
+```
+
+### Output
+
+```text
 Produced: 1
 Consumed: 1
 Produced: 2
@@ -103,16 +125,22 @@ Consumer process started
 Producer process completed
 Consumer process completed
 Multiprocessing completed
-Inference
-Producer adds data to the queue.
-Consumer removes data from the queue.
-Lock protects shared data.
-Semaphore controls access to the queue.
-Analysis
-Threading runs tasks concurrently.
-Multiprocessing runs tasks in separate processes.
-Queue stores the data.
-Synchronization prevents conflicts.
-Result
+```
+
+### Inference
+
+* Producer adds data to the queue.
+* Consumer removes data from the queue.
+* Lock protects shared data.
+* Semaphore controls access to the queue.
+
+### Analysis
+
+* Threading runs tasks concurrently.
+* Multiprocessing runs tasks in separate processes.
+* Queue stores the data.
+* Synchronization prevents conflicts.
+
+### Result
 
 The Producer-Consumer application was successfully implemented using threading, multiprocessing, Lock, and Semaphore.
